@@ -1,0 +1,236 @@
+/*duo.h*/
+#include<stdio.h>
+
+
+//-------------宏定义------------
+
+#define OK 0
+
+//-----------变量声明--------------
+
+int x[100],bestx[100];
+
+int cv = 0,cw = 0,cvi=0,mw = 0,mv = 0,mvi=0;
+int c,n,V;
+
+int weight[100];
+
+int value[100];
+
+int volume[100];
+
+
+//-------------函数声明------------
+
+int Output();
+
+int Input();
+
+void Init();
+
+bool place(int t);
+
+void Track(int t);
+
+
+
+
+ 
+
+/*duo.cpp*/
+
+#include"duo.h"
+void Init()
+{
+	
+      int i;
+	
+      for(i = 0;i<100;i++)
+	
+      {
+		
+                   x[i] = 0;
+		
+                  bestx[i] = 0;
+		
+                  weight[i] = 0;
+		
+                  value[i] = 0;
+
+                  volume[i] = 0;	
+       }
+}
+
+int Input()
+
+{
+	
+         int i;
+
+         char name,color,brand;
+         printf("请输入背包的容量:");
+	
+                   scanf("%d",&c);
+	
+         printf("请依次输入物品的重量:");
+	
+         for(i=0;i<n;i++)
+		
+                   scanf("%d",(weight+i));
+	
+         printf("请依次输入物品的价值:");
+	
+         for(i=0;i<n;i++)
+		
+                    scanf("%d",(value+i));
+
+         printf("请依次输入物品的体积:");
+         for(i=0;i<n;i++)
+		
+                    scanf("%d",(volume+i));
+
+         printf("请用英文依次输入物品的名称:");
+
+                    scanf("%d",name);
+         printf("请用英文依次输入物品的颜色:");
+             
+                    scanf("%d",color);
+         printf("请依次输入物品的数量:");
+         printf("请用英文依次输入物品的品牌:");
+                    scanf("%d",brand)	;	
+         return OK;
+
+}
+
+int Output()
+
+{
+	
+          printf("选择的物品是:");
+	
+          for(int m = 0;m<n;m++)
+		
+                     printf("%d  ",bestx[m]);
+	
+          printf("\nmax value is :%d\n",mv);
+	
+          return OK;
+
+}
+
+bool place(int t)
+
+{
+	
+           if(cw+weight[t] > c)
+           	
+                      return false;
+
+           else	
+           return true;
+
+           
+            if(cv+volume[t] > V)
+           	
+                      return false;
+
+            else	
+           return true;
+
+           
+}
+
+//---------回溯法解多维背包问题-----------------
+
+void Track(int t)
+
+{
+	
+           int m;
+	
+           if(t>=n)
+	
+           {
+				
+                         if(cv>mv)
+		
+                        {
+			
+                                  mv=cv;
+			
+                                  for(m = 0;m<n;m++)
+				
+                                                    bestx[m] = x[m];
+		
+                         }	
+	
+              }
+	
+             else
+	
+             {
+		
+                                    for(m = 0;m<=1;m++)
+		
+                                    {
+			
+                                                   x[t] = m;
+			
+                                                   if(x[t] == 0)
+			
+                                                   {
+				
+                                                              Track(t+1);
+				
+                                                              x[t] = 0;
+			
+                                                     }
+
+                                                      //当前容量小于背包容量			
+                                                     else if(place(t) && x[t]==1)
+			
+                                                     {
+	
+		
+			                                                                                                              cv = cv + value[t];
+				
+                                                               cw = cw + weight[t];
+
+                                                               cvo = cvi + volumr[t];				
+                                                               Track(t+1);
+	
+                                                               //恢复回溯			
+                                                               x[t] = 0;
+				
+                                                               cv = cv - value[t];
+				
+                                                               cw = cw - weight[t];
+
+                                                               cvo = cvo - volume[t];			
+                                                       }
+		 
+                                        }
+	
+                }
+
+}
+
+void main()
+
+{
+	
+          Init();
+	
+          printf("请输入物品的数量:");
+	
+          scanf("%d",&n);
+	
+          Input();
+	
+          Track(0);
+	
+          Output();
+
+          
+}
+
